@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Easy Job Finder — Marketing, Sales & CX Jobs</title>
+<meta name="description" content="Free tool for Marketing, Sales and Customer Experience job seekers in Bangladesh, India, the UK and the Gulf. Curated live openings, an instant CV keyword-check, and a real human review, with no signup needed to browse." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://easyjobfinder.xyz/" />
+<meta property="og:title" content="Easy Job Finder — Marketing, Sales & CX Jobs" />
+<meta property="og:description" content="Curated live openings across Bangladesh, India, the UK and the Gulf, plus an instant CV keyword-check. Real person, real matches, not an algorithm." />
+<meta property="og:image" content="https://easyjobfinder.xyz/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Easy Job Finder — Marketing, Sales & CX Jobs" />
+<meta name="twitter:description" content="Curated live openings across Bangladesh, India, the UK and the Gulf, plus an instant CV keyword-check. Real person, real matches, not an algorithm." />
+<meta name="twitter:image" content="https://easyjobfinder.xyz/og-image.png" />
+<style>
+  :root {
+    --ink: #161b22; --muted: #6b7280; --bg: #f6f2e9; --card: #ffffff;
+    --border: #e8e2d3; --accent: #0f6e6e; --accent-dk: #0a4f4f;
+    --coral: #d8642f; --gold: #a9781f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5; padding: 26px 16px 56px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  .icn { width: 16px; height: 16px; vertical-align: -3px; margin-right: 6px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .icn-lg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .icn-sm { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+  .top { display: flex; align-items: center; gap: 11px; margin-bottom: 26px; }
+  .avatar { width: 44px; height: 44px; border-radius: 50%; background: #0d5f5f; color: #fff; font-family: Georgia, serif; font-weight: 600; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 3px 10px rgba(15,110,110,.25); }
+  .tname { font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; }
+  .tsub { font-size: 12px; color: #9a9488; }
+  .tsub a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+  h1 { font-family: Georgia, serif; font-size: 27px; letter-spacing: -.01em; margin-bottom: 6px; }
+  .sub { font-size: 14.5px; color: var(--muted); margin-bottom: 22px; }
+
+  .tilegrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; transition: all .35s cubic-bezier(.4,0,.2,1); }
+  .tilegrid.collapsed { max-height: 0; opacity: 0; margin: 0; overflow: hidden; pointer-events: none; }
+  .tile {
+    position: relative; border-radius: 14px; padding: 22px 18px; min-height: 122px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    cursor: pointer; border: none; text-align: left; overflow: hidden;
+    color: #fff; transition: transform .1s; box-shadow: 0 3px 10px rgba(0,0,0,.1);
+  }
+  .tile:active { transform: scale(.96); }
+  .tile-name { font-size: 15.5px; font-weight: 700; color: #fff; letter-spacing: -.01em; }
+  .tile-icon { color: rgba(255,255,255,.95); }
+  .tile.t1 { background: #0d5f5f; }
+  .tile.t2 { background: #d8642f; }
+  .tile.t3 { background: #a9781f; }
+  .tile.t4 { background: #3d4f4a; }
+
+  .trust-note { display: flex; align-items: center; gap: 8px; background: #0d5f5f0d; border: 1px solid #0d5f5f22; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+  .trust-note .icn-sm { color: #0d5f5f; flex-shrink: 0; }
+  .trust-note span { font-size: 12px; color: #3d4f4a; font-weight: 600; line-height: 1.4; }
+
+  .switcher { display: none; position: sticky; top: 10px; z-index: 5; background: rgba(246,242,233,.92); backdrop-filter: blur(8px); padding: 8px 0 14px; margin-bottom: 4px; }
+  .switcher.show { display: block; }
+  .switcher-row { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .switcher-row::-webkit-scrollbar { display: none; }
+  .schip { flex-shrink: 0; font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 99px; background: #fff; border: 1px solid var(--border); color: var(--muted); cursor: pointer; white-space: nowrap; transition: all .15s; }
+  .schip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  #resultsSection { display: none; }
+  .hero-strip { border-radius: 18px; padding: 18px 20px; margin-bottom: 16px; color: #fff; background: #0d5f5f; opacity: 0; transform: translateY(6px); animation: heroIn .4s cubic-bezier(.4,0,.2,1) forwards; }
+  @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
+  .hero-title { font-family: Georgia, serif; font-size: 19px; margin-bottom: 3px; }
+  .hero-count { font-size: 12.5px; opacity: .85; }
+
+  .cta-primary { display: block; text-align: center; background: #0d5f5f; color: #fff; font-weight: 700; font-size: 14.5px; text-decoration: none; border-radius: 14px; padding: 15px 18px; margin-bottom: 18px; transition: transform .1s; box-shadow: 0 4px 14px rgba(15,110,110,.2); }
+  .cta-primary:active { transform: scale(.98); }
+  .cta-primary small { display: block; font-weight: 400; font-size: 11.5px; opacity: .8; margin-top: 3px; }
+  .cta-ghost { display: block; text-align: center; background: #fff; color: var(--accent-dk); border: 1px solid var(--border); font-weight: 600; font-size: 13.5px; text-decoration: none; border-radius: 12px; padding: 13px 16px; margin: 24px 0 0; }
+  .cta-lite { display: block; text-align: center; background: #fff; color: var(--coral); border: 1.5px solid var(--coral); font-weight: 700; font-size: 13.5px; text-decoration: none; border-radius: 12px; padding: 12px 16px; margin-bottom: 22px; transition: transform .1s; }
+  .cta-lite:active { transform: scale(.98); }
+  .cta-lite small { display: block; font-weight: 400; font-size: 11px; opacity: .85; margin-top: 3px; color: var(--muted); }
+  .paid-signal { font-size: 11.5px; color: #7a6a4a; line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+  .paid-signal a { color: var(--coral); font-weight: 700; text-decoration: none; }
+
+  .landing-teaser { display: flex; align-items: center; gap: 9px; background: linear-gradient(135deg,#fdf6e6,#fff); border: 1px solid #e8d7ab; border-radius: 13px; padding: 12px 14px; margin-bottom: 14px; }
+  .landing-teaser .icn-sm { color: var(--gold); flex-shrink: 0; }
+  .landing-teaser span { font-size: 12.5px; color: #7a5a17; font-weight: 600; line-height: 1.4; }
+
+  .toolrow { display: flex; gap: 8px; margin-bottom: 14px; }
+  .toolbtn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px 6px; font-size: 11.5px; font-weight: 600; color: var(--muted); cursor: pointer; transition: all .15s; }
+  .toolbtn.on { border-color: var(--ink); color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+  .toolbtn .icn-lg { color: #b0aa9c; }
+  .toolbtn.on .icn-lg { color: var(--accent); }
+
+  .panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .25s ease, margin .35s; margin-bottom: 0; }
+  .panel.open { max-height: 800px; opacity: 1; margin-bottom: 14px; }
+  .panel-inner { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+
+  .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+  textarea { width: 100%; min-height: 110px; font-family: inherit; font-size: 14px; line-height: 1.5; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: var(--ink); resize: vertical; }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  .tip { font-size: 11.5px; color: #a09a88; margin-top: 8px; line-height: 1.5; }
+  .self-check-tag { display: inline-block; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; color: #a09a88; background: var(--bg); padding: 3px 7px; border-radius: 5px; margin-left: 6px; }
+  .bridge-line { font-size: 12px; color: var(--muted); margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+  .bridge-line a { color: var(--coral); font-weight: 600; text-decoration: none; }
+
+  .ctrl-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .ctrl-row label { font-size: 12px; font-weight: 600; color: var(--muted); align-self: center; }
+  select, input[type=text] { font-family: inherit; font-size: 13.5px; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; color: var(--ink); }
+  input[type=text] { min-width: 130px; flex: 1; }
+  select#sectorSelect2, select#reach, select#board, select#exp { width: 100%; }
+
+  .fresh-row { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fresh-pill { font-size: 12px; cursor: pointer; background: var(--bg); border: 1px solid var(--border); padding: 6px 12px; border-radius: 99px; color: var(--muted); }
+  .fresh-pill.on { background: var(--coral); color: #fff; border-color: var(--coral); }
+
+  .apply-btn { display: block; width: 100%; text-align: center; background: #0d5f5f; color: #fff; font-family: inherit; font-weight: 700; font-size: 13.5px; border: none; border-radius: 10px; padding: 12px; margin-top: 16px; cursor: pointer; transition: background .15s, transform .1s; }
+  .apply-btn:active { transform: scale(.98); background: #0a4f4f; }
+
+  .search-wrap { position: relative; margin-bottom: 14px; }
+  .search-wrap .icn-sm { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #a09a88; }
+  #roleSearch { width: 100%; padding: 11px 14px 11px 38px; border-radius: 12px; background: #fff; border: 1px solid var(--border); font-size: 13.5px; }
+  #roleSearch:focus { outline: none; border-color: var(--accent); }
+
+  .count { font-size: 12.5px; color: var(--muted); margin: 4px 0 10px; }
+  .search-note { font-size: 11.5px; color: #a09a88; margin-bottom: 14px; }
+
+  .tier-block { margin-bottom: 10px; }
+  .tier-trigger { display: flex; align-items: center; gap: 10px; padding: 15px 16px; background: #fff; border: 1px solid var(--border); border-radius: 14px; cursor: pointer; transition: border-radius .2s; }
+  .tier-trigger.open { border-radius: 14px 14px 0 0; }
+  .tier-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .tier-name { font-family: Georgia, serif; font-size: 15px; font-weight: 700; }
+  .tier-count { font-size: 11.5px; color: var(--muted); font-weight: 400; margin-left: 2px; }
+  .tier-chev { margin-left: auto; color: #b0aa9c; transition: transform .3s; font-size: 12px; }
+  .tier-chev.open { transform: rotate(90deg); }
+  .tier-body { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s; background: #fdfcf9; border: 1px solid var(--border); border-top: none; border-radius: 0 0 14px 14px; }
+  .tier-body.open { max-height: 5000px; opacity: 1; padding: 12px 12px 4px; }
+
+  .job {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 8px; position: relative; overflow: hidden;
+  }
+  .job::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent); }
+  .job.matched { box-shadow: 0 4px 16px rgba(15,110,110,.1); }
+  .job-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; margin-left: 6px; }
+  .job-title { font-family: Georgia, serif; font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; }
+  .match-badge { display: inline-block; font-size: 9px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; color: var(--accent-dk); background: #0f6e6e15; padding: 3px 7px; border-radius: 6px; margin-left: 7px; vertical-align: middle; }
+  .why { font-size: 11.5px; color: var(--muted); margin: 5px 0 9px 6px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 2px 6px; }
+  .btn { font-family: inherit; font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 8px; padding: 8px 12px; display: inline-block; transition: transform .1s; }
+  .btn:active { transform: scale(.96); }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--accent-dk); border: 1px solid var(--border); }
+
+  .hidden-card { border-radius: 18px; background: linear-gradient(160deg,#fdf6e6,#fff); border: 1px solid #e8d7ab; margin: 22px 0 0; overflow: hidden; box-shadow: 0 4px 16px rgba(169,120,31,.08); }
+  .hidden-trigger { display: flex; align-items: center; gap: 12px; padding: 16px 18px; cursor: pointer; }
+  .hidden-trigger .icn-lg { color: var(--gold); flex-shrink: 0; }
+  .hidden-title { font-family: Georgia, serif; font-size: 15.5px; font-weight: 600; color: #7a5a17; }
+  .hidden-teaser { font-size: 11.5px; color: #a3823f; margin-top: 2px; }
+  .hidden-chev { margin-left: auto; color: #c9a96a; transition: transform .3s; flex-shrink: 0; }
+  .hidden-chev.open { transform: rotate(90deg); }
+  .hidden-panel { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s; }
+  .hidden-panel.open { max-height: 900px; opacity: 1; }
+  .hidden-body { padding: 4px 18px 18px; }
+  .hidden-lead { font-size: 12.5px; color: #4f6a66; margin-bottom: 10px; }
+  .sector-note { font-size: 11.5px; color: #a3823f; margin-bottom: 14px; font-style: italic; }
+  .sub-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #8a5a17; margin: 14px 0 8px; }
+  .sub-head:first-child { margin-top: 0; }
+  .hrow { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 4px; }
+  .hbtn { font-size: 12.5px; font-weight: 600; text-decoration: none; background: #fff; border: 1px solid #e3cd93; color: #8a5a17; border-radius: 9px; padding: 8px 13px; display: inline-block; }
+  .hbtn.solid { background: var(--coral); color: #fff; border-color: var(--coral); }
+  .htip { font-size: 11.5px; color: #7a6a4a; line-height: 1.6; margin-top: 12px; }
+
+  footer { margin-top: 26px; font-size: 11px; color: #b0aa9c; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="avatar">SK</div>
+    <div>
+      <div class="tname">Md Salman Kawcher, MSc</div>
+      <div class="tsub">Marketing, Sales &amp; CX specialist &middot; <a href="https://www.linkedin.com/in/md-salman-kawcher-msc-acim/" target="_blank" rel="noopener">LinkedIn &rarr;</a></div>
+    </div>
+  </div>
+
+  <h1>What are you looking for?</h1>
+  <p class="sub">Tap a category to see roles &amp; live listings &mdash; for every career stage, from entry-level to C-suite.</p>
+
+  <div class="tilegrid" id="tileGrid">
+    <div class="tile t1" data-g="mktgroup">
+      <svg class="icn-lg tile-icon" viewBox="0 0 24 24"><path d="M3 11v2a2 2 0 0 0 2 2h1l3 5V4l-3 5H5a2 2 0 0 0-2 2z"/><path d="M13 8a4 4 0 0 1 0 8"/><path d="M16 5a8 8 0 0 1 0 14"/></svg>
+      <span class="tile-name">Marketing</span>
+    </div>
+    <div class="tile t2" data-g="salesgroup">
+      <svg class="icn-lg tile-icon" viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg>
+      <span class="tile-name">Sales</span>
+    </div>
+    <div class="tile t3" data-g="cx">
+      <svg class="icn-lg tile-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H7l-3 3z"/><path d="M8 10h8M8 13h5"/></svg>
+      <span class="tile-name">Customer Experience</span>
+    </div>
+    <div class="tile t4" data-g="all">
+      <svg class="icn-lg tile-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+      <span class="tile-name">Browse All</span>
+    </div>
+  </div>
+
+  <div class="switcher" id="switcher">
+    <div class="switcher-row" id="switcherRow"></div>
+  </div>
+
+  <div class="trust-note">
+    <svg class="icn-sm" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/></svg>
+    <span>Reviewed personally by Salman &mdash; every submission kept confidential</span>
+  </div>
+
+  <div class="landing-teaser">
+    <svg class="icn-sm" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/></svg>
+    <span>Also unlocks the hidden job market &mdash; unlisted roles &amp; recruiter leads, once you're inside</span>
+  </div>
+
+  <a class="cta-primary" id="topCvCta" href="https://tally.so/r/RGlDo9" target="_blank" rel="noopener">
+    Or submit your CV &amp; get matched &rarr;
+    <small>Real person, real matches &mdash; not an algorithm</small>
+  </a>
+
+  <div id="resultsSection">
+
+    <div class="hero-strip" id="heroStrip">
+      <div class="hero-title" id="heroTitle">Marketing</div>
+      <div class="hero-count" id="heroCount">0 roles</div>
+    </div>
+
+    <a class="cta-lite" id="jobAlertsCta" href="https://tally.so/r/eqlrRx" target="_blank" rel="noopener">
+      Not ready for a full review? Get alerts for these roles &rarr;
+      <small>Pre-filled with what you're browsing &mdash; no CV needed</small>
+    </a>
+
+    <div class="toolrow">
+      <div class="toolbtn" data-panel="cvPanel">
+        <svg class="icn-lg" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><line x1="9" y1="12" x2="17" y2="12"/><line x1="9" y1="16" x2="17" y2="16"/></svg>
+        Match my CV
+      </div>
+      <div class="toolbtn" data-panel="refinePanel">
+        <svg class="icn-lg" viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="16" cy="12" r="2.2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="7" cy="18" r="2.2"/></svg>
+        Refine
+      </div>
+    </div>
+
+    <div class="panel" id="cvPanel">
+      <div class="panel-inner">
+        <div class="field">
+          <label for="cv">Paste your CV or background <span class="self-check-tag">Instant self-check</span></label>
+          <textarea id="cv" placeholder="e.g. '6 years in digital marketing, Google Analytics, SEO, Facebook ads, MSc in marketing, managed a customer service team...'"></textarea>
+          <div class="tip">This is an automatic keyword check that stays on your screen — nothing is sent anywhere. For an actual review, use "Submit your CV" above.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="refinePanel">
+      <div class="panel-inner">
+        <div class="ctrl-row">
+          <label for="loc">Location</label>
+          <input id="loc" type="text" value="Chattogram">
+        </div>
+        <div class="ctrl-row">
+          <label for="reach">Reach</label>
+          <select id="reach">
+            <option value="local">This location</option>
+            <option value="bd">Bangladesh</option>
+            <option value="india">India</option>
+            <option value="me">Middle East</option>
+            <option value="dubai">Dubai / UAE</option>
+            <option value="global" selected>Global</option>
+            <option value="remote">Remote only</option>
+          </select>
+        </div>
+        <div class="ctrl-row">
+          <label for="board">Board</label>
+          <select id="board">
+            <option value="google">Google (all sites)</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="bdjobs">BDjobs</option>
+            <option value="nextjobz">NextJobz (Bangladesh)</option>
+            <option value="indeed">Indeed</option>
+            <option value="glassdoor">Glassdoor</option>
+            <option value="flexjobs">FlexJobs</option>
+            <option value="targetjobs">TargetJobs (UK)</option>
+            <option value="bayt">Bayt (Middle East)</option>
+            <option value="gulftalent">GulfTalent</option>
+            <option value="naukrigulf">Naukrigulf</option>
+            <option value="naukri">Naukri (India)</option>
+            <option value="foundit">Foundit / Monster (India)</option>
+          </select>
+        </div>
+        <p class="tip" style="margin-top:-6px;">FlexJobs may require a subscription to view full listings.</p>
+        <div class="ctrl-row">
+          <label for="exp">Experience</label>
+          <select id="exp">
+            <option value="any">Any level</option>
+            <option value="internship">Internship</option>
+            <option value="entry">Entry level</option>
+            <option value="associate">Associate</option>
+            <option value="midsenior">Mid-Senior level</option>
+            <option value="director">Director</option>
+            <option value="executive">Executive</option>
+          </select>
+        </div>
+        <div class="ctrl-row">
+          <label for="sectorSelect2">Sector</label>
+          <select id="sectorSelect2"></select>
+        </div>
+        <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;">Posted within</label>
+        <div class="fresh-row" id="freshRow"></div>
+        <button class="apply-btn" id="applyRefineBtn" type="button">Apply filters</button>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <svg class="icn-sm" viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg>
+      <input id="roleSearch" type="text" placeholder="Search a specific role, e.g. 'Territory Manager'">
+    </div>
+
+    <p class="count" id="count"></p>
+    <p class="search-note">Buttons open live listings on Google or LinkedIn — apply directly on the page you choose.</p>
+    <div id="grid"></div>
+
+    <div class="hidden-card">
+      <div class="hidden-trigger" id="hiddenTrigger">
+        <svg class="icn-lg" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0"/></svg>
+        <div>
+          <div class="hidden-title">Unlock the hidden job market</div>
+          <div class="hidden-teaser">Company leads, recruiters &amp; early listings</div>
+        </div>
+        <span class="hidden-chev" id="hiddenChev">&#9656;</span>
+      </div>
+      <div class="hidden-panel" id="hiddenPanelBody">
+        <div class="hidden-body">
+          <p class="hidden-lead">Many roles are filled through referrals and direct contact before they're widely advertised. Get ahead of the crowd.</p>
+          <p class="sector-note" id="sectorNote">Using sector filter from Refine: Any sector</p>
+
+          <div class="sub-head">Remote, by country</div>
+          <div class="hrow" id="remoteRow"></div>
+
+          <div class="sub-head">Find companies hiring now</div>
+          <div class="hrow" id="specRow"></div>
+
+          <div class="sub-head">Catch new postings early</div>
+          <div class="hrow" id="alertRow"></div>
+
+          <p class="htip">Set alerts to catch new postings early, search company career pages directly, and tell recruiters and your network what you're looking for.</p>
+
+          <p class="paid-signal">Thinking further ahead &mdash; would a paid CV rewrite or 1:1 coaching session actually help you? <a id="paidInterestLink" href="https://tally.so/r/eqlrRx?interest=paid" target="_blank" rel="noopener">Tell me you'd be interested &rarr;</a></p>
+        </div>
+      </div>
+    </div>
+
+    <a class="cta-ghost" id="humanTouchCta" href="https://tally.so/r/RGlDo9" target="_blank" rel="noopener">Prefer a human touch? Submit your CV &rarr;</a>
+
+    <a class="cta-ghost" href="/blog/" style="margin-top:10px;">Read job search guides &rarr;</a>
+
+    <footer>Marketing, Sales &amp; CX roles only &middot; matches are keyword-based, not guaranteed</footer>
+  </div>
+</div>
+
+<script>
+var CATS = [
+  { id: "marketing", name: "Marketing & Brand", roles: [
+    { t: "Marketing Manager", terms: '"marketing manager" OR "marketing executive"', kw: ["marketing manager", "marketing executive", "marketing strategy", "campaign management", "cim", "acim"] },
+    { t: "Brand Manager", terms: '"brand manager"', kw: ["brand manager", "brand management", "brand positioning"] },
+    { t: "Brand Executive", terms: '"brand executive"', kw: ["brand executive"] },
+    { t: "Assistant Brand Manager", terms: '"assistant brand manager" OR "junior brand manager"', kw: ["assistant brand manager", "junior brand manager"] },
+    { t: "Brand Strategist", terms: '"brand strategist"', kw: ["brand strategist", "brand strategy"] },
+    { t: "Global Brand Manager", terms: '"global brand manager"', kw: ["global brand manager", "global brand"] },
+    { t: "Regional Brand Manager", terms: '"regional brand manager"', kw: ["regional brand manager", "regional brand"] },
+    { t: "Employer Branding Manager", terms: '"employer branding manager" OR "employer brand manager"', kw: ["employer branding", "employer brand manager"] },
+    { t: "Brand Identity Manager", terms: '"brand identity manager"', kw: ["brand identity", "visual identity manager"] },
+    { t: "Product Marketing Manager", terms: '"product marketing manager"', kw: ["product marketing", "go-to-market", "positioning strategy", "product launch"] },
+    { t: "Marketing Communications", terms: '"marketing communications" OR "communications executive"', kw: ["marketing communications", "public relations", "press release", "storytelling"] },
+    { t: "Market Research / Insights Analyst", terms: '"market research" OR "consumer insights" analyst', kw: ["market research", "consumer insights", "consumer behaviour", "competitive analysis", "market positioning"] },
+    { t: "Marketing Coordinator", terms: '"marketing coordinator"', kw: ["marketing coordinator", "campaign coordination", "marketing operations"] },
+    { t: "Trade Marketing Manager", terms: '"trade marketing manager" OR "trade marketing executive"', kw: ["trade marketing", "channel marketing", "retail marketing"] },
+    { t: "Marketing Director", terms: '"marketing director"', kw: ["marketing director", "head of marketing"] },
+    { t: "VP of Marketing", terms: '"VP of Marketing" OR "vice president marketing"', kw: ["vp of marketing", "vice president marketing", "vp marketing"] },
+    { t: "Marketing Team Lead", terms: '"marketing team lead" OR "marketing lead"', kw: ["marketing team lead", "marketing lead", "team lead marketing"] },
+    { t: "Chief Marketing Officer (CMO)", terms: '"Chief Marketing Officer" OR CMO', kw: ["chief marketing officer", "cmo"] },
+    { t: "Marketing Officer", terms: '"marketing officer"', kw: ["marketing officer"] },
+    { t: "Event Marketing Manager", terms: '"event marketing manager" OR "event marketing"', kw: ["event marketing", "brand activation", "event management marketing"] },
+    { t: "Partnership Marketing Manager", terms: '"partnership marketing manager"', kw: ["partnership marketing", "co-marketing", "strategic partnerships marketing"] }
+  ]},
+  { id: "digital", name: "Digital & Performance Marketing", roles: [
+    { t: "Digital Marketing Manager", terms: '"digital marketing manager" OR "digital marketing executive"', kw: ["digital marketing", "digital marketing manager", "digital strategy"] },
+    { t: "Performance Marketing Specialist", terms: '"performance marketing"', kw: ["performance marketing", "ppc", "facebook ads", "meta ads", "google ads", "roas", "cpa"] },
+    { t: "SEO / SEM Specialist", terms: 'SEO OR SEM specialist OR executive', kw: ["seo", "sem", "search engine marketing", "semrush", "moz", "screaming frog", "keyword research"] },
+    { t: "Social Media Manager", terms: '"social media manager" OR "social media executive"', kw: ["social media marketing", "social media manager", "instagram marketing", "hootsuite", "community management"] },
+    { t: "Content Marketing Manager", terms: '"content marketing manager"', kw: ["content marketing", "content strategy", "inbound marketing", "hubspot"] },
+    { t: "Email / CRM Marketing", terms: '"email marketing" OR "crm marketing"', kw: ["email marketing", "mailchimp", "crm marketing", "marketing automation"] },
+    { t: "Marketing Analytics Specialist", terms: '"marketing analytics"', kw: ["marketing analytics", "google analytics", "campaign analysis", "marketing measurement"] },
+    { t: "Digital Marketing Specialist / Executive", terms: '"digital marketing specialist" OR "digital marketing executive"', kw: ["digital marketing specialist", "digital marketing executive"] },
+    { t: "Digital Marketing Officer", terms: '"digital marketing officer"', kw: ["digital marketing officer"] },
+    { t: "Growth Marketing Manager", terms: '"growth marketing manager" OR "growth marketer"', kw: ["growth marketing", "growth marketer", "growth hacking"] },
+    { t: "Influencer Marketing Manager", terms: '"influencer marketing manager"', kw: ["influencer marketing", "influencer manager"] },
+    { t: "E-commerce Marketing Manager", terms: '"e-commerce marketing manager" OR "ecommerce marketing"', kw: ["e-commerce marketing", "ecommerce marketing", "online marketplace marketing"] }
+  ]},
+  { id: "sales", name: "Sales", roles: [
+    { t: "Sales Executive / Officer", terms: '"sales executive" OR "sales officer"', kw: ["sales executive", "sales officer", "sales targets", "revenue generation", "upselling"] },
+    { t: "Sales Manager", terms: '"sales manager"', kw: ["sales manager", "sales strategy", "sales team management", "sales growth"] },
+    { t: "Territory Manager", terms: '"territory manager" OR "territory sales"', kw: ["territory manager", "territory sales", "territory management", "regional sales"] },
+    { t: "Key Account Manager", terms: '"key account manager"', kw: ["key account manager", "key account management", "client relationship", "account growth"] },
+    { t: "Business Development Manager", terms: '"business development" manager OR executive', kw: ["business development", "lead generation", "partnerships", "client acquisition", "prospective clients"] },
+    { t: "Regional Sales Manager", terms: '"regional sales manager"', kw: ["regional sales manager", "regional sales", "multi-branch sales"] },
+    { t: "Channel / Distribution Sales", terms: '"channel sales" OR "distribution manager"', kw: ["channel sales", "distribution management", "trade sales", "retail sales"] },
+    { t: "Inside Sales Representative", terms: '"inside sales representative"', kw: ["inside sales", "sales representative", "cold calling", "sales pipeline"] },
+    { t: "Territory Officer", terms: '"territory officer" OR "field sales officer"', kw: ["territory officer", "field sales officer", "field sales"] },
+    { t: "Sales Director", terms: '"sales director"', kw: ["sales director", "head of sales"] },
+    { t: "VP of Sales", terms: '"VP of Sales" OR "vice president sales"', kw: ["vp of sales", "vice president sales", "vp sales"] },
+    { t: "Sales Team Lead", terms: '"sales team lead" OR "sales lead"', kw: ["sales team lead", "team lead sales"] },
+    { t: "Sales Coordinator", terms: '"sales coordinator"', kw: ["sales coordinator", "sales support", "sales administration"] },
+    { t: "Chief Sales / Revenue Officer (CRO)", terms: '"Chief Revenue Officer" OR "Chief Sales Officer" OR CRO', kw: ["chief revenue officer", "chief sales officer", "cro"] },
+    { t: "Sales Analyst", terms: '"sales analyst"', kw: ["sales analyst", "sales analysis", "sales reporting"] },
+    { t: "Sales Operations Manager", terms: '"sales operations manager" OR "sales ops"', kw: ["sales operations", "sales ops manager"] },
+    { t: "Area Sales Manager", terms: '"area sales manager"', kw: ["area sales manager", "area sales"] },
+    { t: "National Sales Manager", terms: '"national sales manager"', kw: ["national sales manager", "national sales"] }
+  ]},
+  { id: "accounts", name: "Client & Account Management", roles: [
+    { t: "Account Manager", terms: '"account manager"', kw: ["account manager", "account management", "client relationship building", "client retention"] },
+    { t: "Client Relationship Manager", terms: '"client relationship manager" OR "relationship manager"', kw: ["client relationship manager", "relationship management", "portfolio management"] },
+    { t: "Customer Success Manager", terms: '"customer success manager"', kw: ["customer success", "customer success manager", "onboarding", "customer retention"] },
+    { t: "Account Director", terms: '"account director"', kw: ["account director", "head of accounts"] }
+  ]},
+  { id: "cx", name: "Customer Experience & Service", roles: [
+    { t: "Customer Experience Manager", terms: '"customer experience manager"', kw: ["customer experience", "customer experience manager", "cx strategy"] },
+    { t: "Customer Service Manager", terms: '"customer service manager"', kw: ["customer service manager", "customer service", "customer satisfaction", "service recovery", "team management"] },
+    { t: "Customer Support Lead", terms: '"customer support" lead OR manager', kw: ["customer support", "support lead", "help desk management"] },
+    { t: "Call Center Manager", terms: '"call center manager" OR "call centre manager"', kw: ["call center", "call centre", "inbound", "outbound", "contact center"] },
+    { t: "Customer Support Representative", terms: '"customer support" agent OR representative', kw: ["customer support representative", "support agent", "customer inquiries"] },
+    { t: "Customer Experience Director", terms: '"customer experience director" OR "head of customer experience"', kw: ["customer experience director", "head of customer experience"] },
+    { t: "CX Team Lead", terms: '"CX team lead" OR "customer experience lead"', kw: ["cx team lead", "customer experience lead"] },
+    { t: "Chief Customer Officer (CCO)", terms: '"Chief Customer Officer" OR CCO', kw: ["chief customer officer", "cco"] },
+    { t: "Customer Insights / Customer Analyst", terms: '"customer insights analyst" OR "customer analyst"', kw: ["customer insights analyst", "customer analyst", "customer data analysis"] },
+    { t: "Customer Retention Specialist", terms: '"customer retention specialist"', kw: ["customer retention specialist", "retention specialist", "churn reduction"] },
+    { t: "Customer Service QA Manager", terms: '"customer service QA manager" OR "quality assurance customer service"', kw: ["quality assurance customer service", "customer service qa", "qa manager customer service"] }
+  ]}
+];
+
+var GROUP_MAP = { mktgroup: ["marketing", "digital"], salesgroup: ["sales", "accounts"] };
+var HERO_META = {
+  mktgroup: { title: "Marketing" },
+  salesgroup: { title: "Sales" },
+  cx: { title: "Customer Experience" },
+  all: { title: "All Roles" }
+};
+
+var SITE = { linkedin: "site:linkedin.com/jobs", bdjobs: "site:bdjobs.com", indeed: "site:indeed.com", glassdoor: "site:glassdoor.com", flexjobs: "site:flexjobs.com", targetjobs: "site:targetjobs.co.uk", bayt: "site:bayt.com", gulftalent: "site:gulftalent.com", naukrigulf: "site:naukrigulf.com", naukri: "site:naukri.com", foundit: "site:foundit.in", nextjobz: "site:nextjobz.com.bd" };
+var JOB_SITES = 'site:bdjobs.com OR site:indeed.com OR site:glassdoor.com OR site:bayt.com OR site:gulftalent.com OR site:naukrigulf.com OR site:linkedin.com/jobs';
+var NOISE_FILTER = '-"how to become" -"salary guide" -"career advice" -"interview questions"';
+
+var detectedRegion = null;
+function detectRegion() {
+  try {
+    var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    if (tz === "Asia/Dhaka") return "bd";
+    if (tz === "Asia/Kolkata" || tz === "Asia/Calcutta") return "india";
+    if (["Asia/Dubai", "Asia/Riyadh", "Asia/Qatar", "Asia/Kuwait", "Asia/Bahrain", "Asia/Muscat"].indexOf(tz) !== -1) return "gulf";
+    if (tz.indexOf("Europe/London") !== -1) return "uk";
+  } catch (e) {}
+  return null;
+}
+function regionalJobSites() {
+  var reach = document.getElementById("reach").value;
+  if (reach === "bd") return "site:bdjobs.com OR site:nextjobz.com.bd OR site:linkedin.com/jobs OR site:indeed.com";
+  if (reach === "india") return "site:naukri.com OR site:foundit.in OR site:linkedin.com/jobs OR site:indeed.co.in";
+  if (reach === "me" || reach === "dubai") return "site:gulftalent.com OR site:bayt.com OR site:naukrigulf.com OR site:linkedin.com/jobs OR site:indeed.com";
+  if ((reach === "global" || reach === "remote") && detectedRegion === "uk") return "site:indeed.com OR site:linkedin.com/jobs OR site:targetjobs.co.uk";
+  return JOB_SITES;
+}
+
+var EXP_LEVELS = {
+  internship: { linkedin: "1", google: '"internship" OR "intern"' },
+  entry: { linkedin: "2", google: '"entry level" OR "junior"' },
+  associate: { linkedin: "3", google: '"associate"' },
+  midsenior: { linkedin: "4", google: '"mid-senior" OR "senior"' },
+  director: { linkedin: "5", google: '"director"' },
+  executive: { linkedin: "6", google: '"executive" OR "head of"' }
+};
+
+var SECTORS = [
+  { id: "any", label: "Any sector", terms: "" },
+  { id: "mnc", label: "MNC", terms: '"multinational company" OR MNC' },
+  { id: "fintech", label: "Fintech", terms: 'fintech OR "financial technology"' },
+  { id: "agency", label: "Agency", terms: '"advertising agency" OR "marketing agency"' },
+  { id: "saas", label: "SaaS / Tech", terms: 'SaaS OR "tech company" OR software' },
+  { id: "fmcg", label: "FMCG", terms: 'FMCG OR "consumer goods"' },
+  { id: "financial", label: "Financial Institution", terms: 'bank OR "financial institution" OR NBFI' },
+  { id: "telecom", label: "Telecom", terms: 'telecom OR telecommunications' },
+  { id: "hospitality", label: "Hospitality", terms: 'hospitality OR hotel OR resort' },
+  { id: "healthcare", label: "Health Care", terms: 'healthcare OR hospital OR pharmaceutical' },
+  { id: "logistics", label: "Logistics", terms: 'logistics OR "supply chain" OR shipping' },
+  { id: "manufacturing", label: "Manufacturing", terms: 'manufacturing OR factory OR industrial' },
+  { id: "ngo", label: "NGO / UN", terms: 'NGO OR "United Nations" OR "UN agency" OR nonprofit' },
+  { id: "sustainability", label: "Sustainability / CSR / ESG", terms: 'sustainability OR CSR OR ESG OR "SDG" OR "sustainable development"' },
+  { id: "embassy", label: "Embassy", terms: 'embassy OR consulate OR "diplomatic mission"' },
+  { id: "university", label: "University", terms: 'university OR "higher education"' },
+  { id: "lawfirm", label: "Law Firm", terms: '"law firm" OR legal' },
+  { id: "education", label: "Education", terms: 'education OR school OR "ed-tech"' },
+  { id: "smallbiz", label: "Small Business", terms: '"small business" OR SME OR "family business"' },
+  { id: "startup", label: "Startup", terms: 'startup OR "early-stage" OR "series A" OR "series B" OR "scale-up" OR "venture-backed"' }
+];
+
+var MATCH_THRESHOLD = 2;
+var activeCat = null;
+var activeFresh = "any";
+var activeSector = "any";
+var openTiers = {};
+
+var FRESH_OPTIONS = [
+  { id: "any", label: "Any time", gtbs: "", lseconds: "" },
+  { id: "h24", label: "24 hours", gtbs: "qdr:h24", lseconds: "86400" },
+  { id: "h72", label: "72 hours", gtbs: "qdr:h72", lseconds: "259200" },
+  { id: "d7", label: "7 days", gtbs: "qdr:d7", lseconds: "604800" },
+  { id: "m1", label: "1 month", gtbs: "qdr:m1", lseconds: "2592000" }
+];
+
+var REMOTE_COUNTRIES = [
+  { label: "Remote UAE", country: "United Arab Emirates" },
+  { label: "Remote Australia", country: "Australia" },
+  { label: "Remote US", country: "United States" },
+  { label: "Remote UK", country: "United Kingdom" }
+];
+
+function primaryTitle(t) { var idx = t.indexOf(" / "); return idx !== -1 ? t.substring(0, idx) : t; }
+function currentFresh() { for (var i = 0; i < FRESH_OPTIONS.length; i++) if (FRESH_OPTIONS[i].id === activeFresh) return FRESH_OPTIONS[i]; return FRESH_OPTIONS[0]; }
+function currentSectorObj() { for (var s = 0; s < SECTORS.length; s++) if (SECTORS[s].id === activeSector) return SECTORS[s]; return SECTORS[0]; }
+function currentSectorTerms() { var so = currentSectorObj(); return so.terms ? " (" + so.terms + ")" : ""; }
+
+function scoreRole(role, cvText) {
+  if (!cvText) return 0;
+  var padded = " " + cvText + " ";
+  var n = 0;
+  for (var i = 0; i < role.kw.length; i++) {
+    var k = role.kw[i];
+    var idx = padded.indexOf(k);
+    while (idx !== -1) {
+      var before = padded.charAt(idx - 1);
+      var after = padded.charAt(idx + k.length);
+      var beforeOK = !(before >= "a" && before <= "z");
+      var afterOK = !(after >= "a" && after <= "z");
+      if (beforeOK && afterOK) { n++; break; }
+      idx = padded.indexOf(k, idx + 1);
+    }
+  }
+  return n;
+}
+
+function catAllowed(catId) {
+  if (activeCat === "all") return true;
+  if (GROUP_MAP[activeCat]) return GROUP_MAP[activeCat].indexOf(catId) !== -1;
+  return catId === activeCat;
+}
+
+function roleTier(t) {
+  var low = t.toLowerCase();
+  if (low.indexOf("chief") !== -1 || low.indexOf("vp of") !== -1 || low.indexOf("vice president") !== -1 || low.indexOf("director") !== -1) return "leadership";
+  if (low.indexOf("manager") !== -1 || low.indexOf("team lead") !== -1) return "manager";
+  return "entry";
+}
+var TIER_LABELS = { entry: "Entry & Specialist", manager: "Manager", leadership: "Leadership" };
+var TIER_ORDER = ["entry", "manager", "leadership"];
+var TIER_COLOR = { entry: "#0f6e6e", manager: "#d8642f", leadership: "#a9781f" };
+
+function reachClause() {
+  var reach = document.getElementById("reach").value;
+  var loc = document.getElementById("loc").value.trim() || "Chattogram";
+  if (reach === "local") return '("' + loc + '" OR remote)';
+  if (reach === "bd") return '(Bangladesh OR "' + loc + '" OR remote)';
+  if (reach === "india") return '(India OR Bengaluru OR Mumbai OR Delhi OR Hyderabad OR Pune OR remote)';
+  if (reach === "me") return '("Middle East" OR UAE OR "Saudi Arabia" OR Qatar OR Bahrain OR Kuwait OR Oman OR remote)';
+  if (reach === "dubai") return '(Dubai OR UAE OR "United Arab Emirates" OR remote)';
+  if (reach === "remote") return '(remote OR "work from home")';
+  return '(remote OR global OR worldwide)';
+}
+
+function googleURL(role) {
+  var board = document.getElementById("board").value;
+  var title = primaryTitle(role.t);
+  var q = '"' + title + '" jobs ' + reachClause() + currentSectorTerms() + " " + NOISE_FILTER;
+  var exp = document.getElementById("exp").value;
+  if (exp !== "any" && EXP_LEVELS[exp]) q += " " + EXP_LEVELS[exp].google;
+  if (board === "google") { q = "(" + regionalJobSites() + ") " + q; } else if (SITE[board]) { q = SITE[board] + " " + q; }
+  var url = "https://www.google.com/search?q=" + encodeURIComponent(q);
+  var fresh = currentFresh();
+  if (fresh.gtbs) url += "&tbs=" + fresh.gtbs;
+  return url;
+}
+
+function linkedinURL(role) {
+  var reach = document.getElementById("reach").value;
+  var loc = document.getElementById("loc").value.trim() || "Chattogram";
+  var place = (reach === "remote" || reach === "global") ? "Worldwide" : reach === "me" ? "Middle East" : reach === "dubai" ? "Dubai, United Arab Emirates" : reach === "india" ? "India" : reach === "bd" ? "Bangladesh" : loc + ", Bangladesh";
+  var title = primaryTitle(role.t);
+  var url = "https://www.linkedin.com/jobs/search/?keywords=" + encodeURIComponent('"' + title + '"') + "&location=" + encodeURIComponent(place) + "&sortBy=DD";
+  if (reach === "remote") url += "&f_WT=2";
+  var exp = document.getElementById("exp").value;
+  if (exp !== "any" && EXP_LEVELS[exp]) url += "&f_E=" + EXP_LEVELS[exp].linkedin;
+  var fresh = currentFresh();
+  if (fresh.lseconds) url += "&f_TPR=r" + fresh.lseconds;
+  return url;
+}
+
+function buildSwitcher() {
+  var row = document.getElementById("switcherRow");
+  row.innerHTML = "";
+  var opts = [{ id: "mktgroup", label: "Marketing" }, { id: "salesgroup", label: "Sales" }, { id: "cx", label: "CX" }, { id: "all", label: "All" }];
+  for (var i = 0; i < opts.length; i++) {
+    (function (o) {
+      var c = document.createElement("span");
+      c.className = "schip" + (o.id === activeCat ? " on" : "");
+      c.textContent = o.label;
+      c.onclick = function () { selectCategory(o.id); };
+      row.appendChild(c);
+    })(opts[i]);
+  }
+}
+
+function selectCategory(g) {
+  activeCat = g;
+  openTiers = {};
+  document.getElementById("roleSearch").value = "";
+  document.getElementById("tileGrid").className = "tilegrid collapsed";
+  document.getElementById("switcher").className = "switcher show";
+  buildSwitcher();
+  var meta = HERO_META[g];
+  var hero = document.getElementById("heroStrip");
+  hero.className = "hero-strip";
+  hero.style.animation = "none"; hero.offsetHeight; hero.style.animation = null;
+  document.getElementById("heroTitle").textContent = meta.title;
+  var sec = document.getElementById("resultsSection");
+  var firstReveal = sec.style.display !== "block";
+  sec.style.display = "block";
+  render();
+  buildHidden();
+  if (firstReveal) setTimeout(function () { sec.scrollIntoView({ behavior: "smooth", block: "start" }); }, 100);
+}
+
+function buildFresh() {
+  var row = document.getElementById("freshRow");
+  row.innerHTML = "";
+  for (var i = 0; i < FRESH_OPTIONS.length; i++) {
+    (function (opt) {
+      var p = document.createElement("span");
+      p.className = "fresh-pill" + (opt.id === activeFresh ? " on" : "");
+      p.textContent = opt.label;
+      p.onclick = function () {
+        activeFresh = opt.id;
+        var all = row.getElementsByClassName("fresh-pill");
+        for (var j = 0; j < all.length; j++) all[j].className = "fresh-pill";
+        p.className = "fresh-pill on";
+        render();
+      };
+      row.appendChild(p);
+    })(FRESH_OPTIONS[i]);
+  }
+}
+
+function buildSectorSelect() {
+  var sel = document.getElementById("sectorSelect2");
+  if (!sel.dataset.built) {
+    for (var s = 0; s < SECTORS.length; s++) {
+      var opt = document.createElement("option");
+      opt.value = SECTORS[s].id; opt.textContent = SECTORS[s].label;
+      sel.appendChild(opt);
+    }
+    sel.onchange = function () {
+      activeSector = sel.value;
+      render();
+      buildHidden();
+    };
+    sel.dataset.built = "1";
+  }
+  sel.value = activeSector;
+}
+
+function makeCard(it, hasCV, delayIdx, showCat) {
+  var isMatch = hasCV && it.score >= MATCH_THRESHOLD;
+  var role = it.role;
+  var card = document.createElement("div");
+  card.className = "job" + (isMatch ? " matched" : "");
+
+  var top = document.createElement("div");
+  top.className = "job-top";
+  var title = document.createElement("div");
+  title.className = "job-title";
+  title.textContent = role.t;
+  if (isMatch) {
+    var badge = document.createElement("span");
+    badge.className = "match-badge";
+    badge.textContent = it.score >= 3 ? "Strong match" : "Partial match";
+    title.appendChild(badge);
+  }
+  top.appendChild(title);
+
+  var actions = document.createElement("div");
+  actions.className = "actions";
+  var b1 = document.createElement("a");
+  b1.className = "btn primary"; b1.target = "_blank"; b1.rel = "noopener"; b1.href = googleURL(role); b1.textContent = "Find & Apply";
+  var b2 = document.createElement("a");
+  b2.className = "btn ghost"; b2.target = "_blank"; b2.rel = "noopener"; b2.href = linkedinURL(role); b2.textContent = "LinkedIn Jobs";
+  actions.appendChild(b1); actions.appendChild(b2);
+
+  card.appendChild(top);
+  if (showCat) {
+    var catLabel = document.createElement("div");
+    catLabel.className = "why";
+    catLabel.textContent = it.cat.name;
+    card.appendChild(catLabel);
+  }
+  card.appendChild(actions);
+  return card;
+}
+
+var CONTEXT_FORM_BASE = "https://tally.so/r/eqlrRx";
+var MAIN_FORM_BASE = "https://tally.so/r/RGlDo9";
+
+function buildMainFormURL(includeDetected) {
+  var params = buildContextParams();
+  if (includeDetected && detectedRegion) params.push("detected_region=" + encodeURIComponent(detectedRegion));
+  return params.length ? MAIN_FORM_BASE + "?" + params.join("&") : MAIN_FORM_BASE;
+}
+
+function buildContextParams() {
+  var params = [];
+  if (activeCat && HERO_META[activeCat]) params.push("category=" + encodeURIComponent(HERO_META[activeCat].title));
+  var reachSel = document.getElementById("reach");
+  if (reachSel && reachSel.selectedOptions[0]) params.push("country=" + encodeURIComponent(reachSel.selectedOptions[0].text));
+  var expSel = document.getElementById("exp");
+  if (expSel && expSel.selectedOptions[0]) params.push("stage=" + encodeURIComponent(expSel.selectedOptions[0].text));
+  var locVal = document.getElementById("loc") ? document.getElementById("loc").value.trim() : "";
+  if (locVal) params.push("location=" + encodeURIComponent(locVal));
+  return params;
+}
+
+function updateSoftCTAs() {
+  var base = buildContextParams();
+  var alertsLink = document.getElementById("jobAlertsCta");
+  if (alertsLink) alertsLink.href = CONTEXT_FORM_BASE + "?" + base.concat(["interest=alerts"]).join("&");
+  var paidLink = document.getElementById("paidInterestLink");
+  if (paidLink) paidLink.href = CONTEXT_FORM_BASE + "?" + base.concat(["interest=paid"]).join("&");
+  var humanTouchLink = document.getElementById("humanTouchCta");
+  if (humanTouchLink) humanTouchLink.href = buildMainFormURL(true);
+}
+
+function render() {
+  updateSoftCTAs();
+  var grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  var cvText = (document.getElementById("cv").value || "").toLowerCase();
+  var hasCV = cvText.trim().length > 2;
+  var searchVal = (document.getElementById("roleSearch").value || "").toLowerCase().trim();
+  var count = 0;
+
+  var items = [];
+  for (var c = 0; c < CATS.length; c++) {
+    var cat = CATS[c];
+    if (!catAllowed(cat.id)) continue;
+    for (var r = 0; r < cat.roles.length; r++) items.push({ cat: cat, role: cat.roles[r], score: scoreRole(cat.roles[r], cvText) });
+  }
+  count = items.length;
+
+  if (searchVal) {
+    var filtered = items.filter(function (it) { return it.role.t.toLowerCase().indexOf(searchVal) !== -1; });
+    document.getElementById("count").innerHTML = filtered.length + " result" + (filtered.length === 1 ? "" : "s") + " for \u201c" + searchVal + "\u201d";
+    for (var fi = 0; fi < filtered.length; fi++) grid.appendChild(makeCard(filtered[fi], hasCV, fi, true));
+    document.getElementById("heroCount").textContent = count + " roles total";
+    return;
+  }
+
+  if (hasCV) {
+    items.sort(function (a, b) { return b.score - a.score; });
+    var matchCount = 0;
+    for (var m = 0; m < items.length; m++) if (items[m].score >= MATCH_THRESHOLD) matchCount++;
+    document.getElementById("count").innerHTML = "<b>" + matchCount + "</b> match your background";
+    document.getElementById("heroCount").textContent = count + " roles";
+    for (var i = 0; i < items.length; i++) grid.appendChild(makeCard(items[i], hasCV, i, true));
+
+    var existingBridge = document.getElementById("bridgeLine");
+    if (existingBridge) existingBridge.remove();
+    var bridge = document.createElement("p");
+    bridge.id = "bridgeLine";
+    bridge.className = "bridge-line";
+    bridge.innerHTML = 'This is just a keyword check. For a real review from Salman, <a href="' + buildMainFormURL(true) + '" target="_blank" rel="noopener">submit your CV \u2192</a>';
+    document.getElementById("cvPanel").querySelector(".panel-inner").appendChild(bridge);
+    return;
+  }
+
+  document.getElementById("count").innerHTML = "";
+  document.getElementById("heroCount").textContent = count + " roles";
+
+  var tierGroups = { entry: [], manager: [], leadership: [] };
+  for (var ti = 0; ti < items.length; ti++) tierGroups[roleTier(items[ti].role.t)].push(items[ti]);
+
+  for (var to = 0; to < TIER_ORDER.length; to++) {
+    var tier = TIER_ORDER[to];
+    var list = tierGroups[tier];
+    if (!list.length) continue;
+
+    var block = document.createElement("div");
+    block.className = "tier-block";
+
+    var trigger = document.createElement("div");
+    trigger.className = "tier-trigger" + (openTiers[tier] ? " open" : "");
+    var dot = document.createElement("span");
+    dot.className = "tier-dot";
+    dot.style.background = TIER_COLOR[tier];
+    var name = document.createElement("span");
+    name.className = "tier-name";
+    name.textContent = TIER_LABELS[tier];
+    var cnt = document.createElement("span");
+    cnt.className = "tier-count";
+    cnt.textContent = list.length + " role" + (list.length === 1 ? "" : "s");
+    var chev = document.createElement("span");
+    chev.className = "tier-chev" + (openTiers[tier] ? " open" : "");
+    chev.innerHTML = "&#9656;";
+    trigger.appendChild(dot); trigger.appendChild(name); trigger.appendChild(cnt); trigger.appendChild(chev);
+
+    var body = document.createElement("div");
+    body.className = "tier-body" + (openTiers[tier] ? " open" : "");
+    for (var li = 0; li < list.length; li++) body.appendChild(makeCard(list[li], false, li, true));
+
+    trigger.onclick = (function (tr) {
+      return function () {
+        openTiers[tr] = !openTiers[tr];
+        render();
+      };
+    })(tier);
+
+    block.appendChild(trigger);
+    block.appendChild(body);
+    grid.appendChild(block);
+  }
+}
+
+function buildHidden() {
+  var loc = document.getElementById("loc").value.trim() || "Chattogram";
+  var reach = document.getElementById("reach").value;
+  var place = (reach === "remote" || reach === "global") ? "" : reach === "me" ? "Middle East" : reach === "dubai" ? "Dubai" : reach === "india" ? "India" : reach === "bd" ? "Bangladesh" : loc;
+  var placeQ = place ? ' "' + place + '"' : " remote";
+
+  var sectorObj = currentSectorObj();
+  document.getElementById("sectorNote").textContent = "Using sector filter from Refine: " + sectorObj.label;
+
+  var remoteRow = document.getElementById("remoteRow");
+  remoteRow.innerHTML = "";
+  for (var k = 0; k < REMOTE_COUNTRIES.length; k++) {
+    var rc = REMOTE_COUNTRIES[k];
+    var a0 = document.createElement("a");
+    a0.className = "hbtn"; a0.target = "_blank"; a0.rel = "noopener";
+    a0.href = "https://www.linkedin.com/jobs/search/?keywords=" + encodeURIComponent("marketing OR sales OR \"customer experience\"") + "&location=" + encodeURIComponent(rc.country) + "&f_WT=2";
+    a0.textContent = rc.label;
+    remoteRow.appendChild(a0);
+  }
+
+  var sectorTerms = currentSectorTerms();
+
+  var spec = [
+    { label: "Companies hiring now", url: "https://www.google.com/search?q=" + encodeURIComponent('"we\'re hiring" OR "now hiring"' + placeQ + sectorTerms + " site:linkedin.com/posts") },
+    { label: "Company career pages", url: "https://www.google.com/search?q=" + encodeURIComponent('careers OR "join our team"' + placeQ + sectorTerms + " -site:linkedin.com -site:indeed.com") },
+    { label: "Recruiters & agencies", url: "https://www.linkedin.com/search/results/people/?keywords=" + encodeURIComponent("recruiter " + (place || "remote")) }
+  ];
+  var specRow = document.getElementById("specRow");
+  specRow.innerHTML = "";
+  for (var i = 0; i < spec.length; i++) {
+    var a = document.createElement("a");
+    a.className = "hbtn"; a.target = "_blank"; a.rel = "noopener"; a.href = spec[i].url; a.textContent = spec[i].label;
+    specRow.appendChild(a);
+  }
+
+  var alerts = [
+    { label: "Set LinkedIn alert", url: "https://www.linkedin.com/jobs/search/?keywords=&location=" + encodeURIComponent(place || "Worldwide"), solid: true },
+    { label: "Set Indeed alert", url: "https://www.indeed.com/jobs?q=&l=" + encodeURIComponent(place || "Remote") },
+    { label: "Set Google Jobs alert", url: "https://www.google.com/search?q=" + encodeURIComponent("jobs" + placeQ) + "&ibp=htl;jobs" }
+  ];
+  var alertRow = document.getElementById("alertRow");
+  alertRow.innerHTML = "";
+  for (var j = 0; j < alerts.length; j++) {
+    var b = document.createElement("a");
+    b.className = "hbtn" + (alerts[j].solid ? " solid" : ""); b.target = "_blank"; b.rel = "noopener"; b.href = alerts[j].url; b.textContent = alerts[j].label;
+    alertRow.appendChild(b);
+  }
+}
+
+var tiles = document.getElementsByClassName("tile");
+for (var ti2 = 0; ti2 < tiles.length; ti2++) {
+  tiles[ti2].onclick = function () { selectCategory(this.getAttribute("data-g")); };
+}
+
+var toolbtns = document.getElementsByClassName("toolbtn");
+for (var tb = 0; tb < toolbtns.length; tb++) {
+  toolbtns[tb].onclick = function () {
+    var target = document.getElementById(this.getAttribute("data-panel"));
+    var isOpen = target.className.indexOf("open") !== -1;
+    var allPanels = document.getElementsByClassName("panel");
+    var allBtns = document.getElementsByClassName("toolbtn");
+    for (var x = 0; x < allPanels.length; x++) allPanels[x].className = "panel";
+    for (var y = 0; y < allBtns.length; y++) allBtns[y].className = "toolbtn";
+    if (!isOpen) { target.className = "panel open"; this.className = "toolbtn on"; }
+  };
+}
+
+document.getElementById("hiddenTrigger").onclick = function () {
+  var panel = document.getElementById("hiddenPanelBody");
+  var chev = document.getElementById("hiddenChev");
+  var isOpen = panel.className.indexOf("open") !== -1;
+  panel.className = "hidden-panel" + (isOpen ? "" : " open");
+  chev.className = "hidden-chev" + (isOpen ? "" : " open");
+};
+
+document.getElementById("board").onchange = function () { render(); buildHidden(); };
+document.getElementById("reach").onchange = function () { render(); buildHidden(); };
+document.getElementById("exp").onchange = function () { render(); };
+document.getElementById("loc").oninput = function () { render(); buildHidden(); };
+document.getElementById("cv").oninput = render;
+document.getElementById("roleSearch").oninput = render;
+
+document.getElementById("applyRefineBtn").onclick = function () {
+  render();
+  buildHidden();
+  var btn = this;
+  var original = btn.textContent;
+  btn.textContent = "\u2713 Filters applied";
+  btn.style.background = "#0a4f4f";
+  setTimeout(function () {
+    btn.textContent = original;
+    btn.style.background = "";
+    var refinePanel = document.getElementById("refinePanel");
+    var refineToolbtn = document.querySelector('.toolbtn[data-panel="refinePanel"]');
+    refinePanel.className = "panel";
+    if (refineToolbtn) refineToolbtn.className = "toolbtn";
+    var grid = document.getElementById("grid");
+    if (grid) grid.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 700);
+};
+
+buildFresh();
+buildSectorSelect();
+
+detectedRegion = detectRegion();
+if (detectedRegion === "bd") { document.getElementById("reach").value = "bd"; }
+else if (detectedRegion === "india") { document.getElementById("reach").value = "india"; }
+else if (detectedRegion === "gulf") { document.getElementById("reach").value = "me"; }
+var topCvLink = document.getElementById("topCvCta");
+if (topCvLink) topCvLink.href = buildMainFormURL(true);
+</script>
+</body>
+</html>
